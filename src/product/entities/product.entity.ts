@@ -1,9 +1,9 @@
-```typescript
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 /**
- * Represents a product in the system.
+ * Product Entity
+ * Represents a product in the pizzeria.
  */
 @Entity()
 export class Product {
@@ -15,50 +15,37 @@ export class Product {
 
   /**
    * The name of the product.
-   * @example "Pizza Margherita"
+   * Must not be empty.
    */
-  @Column()
   @IsString()
   @IsNotEmpty()
+  @Column()
   name: string;
 
   /**
-   * The price of the product.
-   * @example 12.99
+   * A description of the product.
+   * Can be empty.
    */
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @IsString()
+  @IsOptional()
+  @Column({ nullable: true })
+  description?: string;
+
+  /**
+   * The price of the product.
+   * Must be a number greater than or equal to 0.
+   */
   @IsNumber()
-  @Min(0.01)
+  @Min(0)
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
   /**
    * The URL of the product's image.
-   * @example "https://example.com/pizza.jpg"
+   * Can be empty.
    */
-  @Column()
   @IsString()
-  @IsNotEmpty()
-  image: string;
-
-  /**
-   * A description of the product.
-   * @example "A classic pizza with tomato sauce, mozzarella, and basil."
-   */
-  @Column({ type: 'text' })
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-
-  /**
-   * The date and time when the product was created.
-   */
-  @CreateDateColumn()
-  createdAt: Date;
-
-  /**
-   * The date and time when the product was last updated.
-   */
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @IsOptional()
+  @Column({ nullable: true })
+  image?: string;
 }
-```
